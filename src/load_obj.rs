@@ -96,32 +96,41 @@ impl ObjLoader{
             let ids_line = face_descr_iter.next().unwrap();
             let mut ids_iter = ids_line.split("/");
             // Vert
-            let vert_id = ids_iter.next().unwrap().parse::<usize>();
-            if let Ok(vert_id) = vert_id { 
-                vert_ids[i] = vert_id; 
-            } else {
-                println!("{}", "vertex coords are missing in obj! Press enter to close window".red());
-                let _ = std::io::stdin().read(&mut [0u8]).unwrap();
-                std::process::exit(0);
-            }
+            let vert_id = ids_iter.next().ok_or("");
+            // Parse if need to load
+            if self.load_verts{
+                if let Ok(vert_id) = vert_id { 
+                    vert_ids[i] = vert_id.parse::<usize>().unwrap(); 
+                } else {
+                    println!("{}", "vertex coords are missing in obj! Press enter to close window".red());
+                    let _ = std::io::stdin().read(&mut [0u8]).unwrap();
+                    std::process::exit(0);
+                }
+            }       
             // Tex
-            let tex_id = ids_iter.next().unwrap().parse::<usize>();
-            if let Ok(tex_id) = tex_id { 
-                tex_ids[i] = tex_id; 
-            } else {
-                println!("{}", "texture coords are missing in obj! Press enter to close window".red());
-                let _ = std::io::stdin().read(&mut [0u8]).unwrap();
-                std::process::exit(0);
-            }
+            let tex_id = ids_iter.next().ok_or("");
+            // Parse if need to load
+            if self.load_tex{
+                if let Ok(tex_id) = tex_id { 
+                    tex_ids[i] = tex_id.parse::<usize>().unwrap(); 
+                } else {
+                    println!("{}", "texture coords are missing in obj! Press enter to close window".red());
+                    let _ = std::io::stdin().read(&mut [0u8]).unwrap();
+                    std::process::exit(0);
+                }
+            }      
             // Norm
-            let normal_id = ids_iter.next().unwrap().parse::<usize>();
-            if let Ok(normal_id) = normal_id { 
-                normal_ids[i] = normal_id; 
-            } else {
-                println!("{}", "normals are missing in obj! Press enter to close window".red());
-                let _ = std::io::stdin().read(&mut [0u8]).unwrap();
-                std::process::exit(0);
-            }
+            let normal_id = ids_iter.next().ok_or("");
+            // Parse if need to load
+            if self.load_normals{
+                if let Ok(normal_id) = normal_id { 
+                    normal_ids[i] = normal_id.parse::<usize>().unwrap(); 
+                } else {
+                    println!("{}", "normals are missing in obj! Press enter to close window".red());
+                    let _ = std::io::stdin().read(&mut [0u8]).unwrap();
+                    std::process::exit(0);
+                }
+            }      
         }
 
         let mut verts : [Vec3; 3] = [Vec3::zero(), Vec3::zero(), Vec3::zero()];
